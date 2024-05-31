@@ -21,3 +21,7 @@ CLSX lib
 
 
 Atribuir a classe com funçao ternaria, e configurar o CSS de acordo com o horario da classe atribuida.
+
+Diferenças entre function and arrow function
+
+This is not the time and place
