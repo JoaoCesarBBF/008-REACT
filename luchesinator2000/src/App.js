@@ -6,6 +6,7 @@ import { TbTemperatureSnow, TbCloudRain, TbTemperaturePlus } from "react-icons/t
 import { RiWindyFill } from "react-icons/ri";
 import { WiHumidity } from "react-icons/wi";
 
+import { Clock, DayOrNightWrapper } from './components'
 import { cepService } from './services/cep'
 import api2 from './services/api2'
 
@@ -14,6 +15,7 @@ import './styles.css'
 function App() {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [input, setInput] = useState('')
+  const [showClock, setShowClock] = useState(true)
   const [cep, setCep] = useState({})
   const [tempo, setTempo] = useState({})
   const [ip, setIP] = useState('');
@@ -26,16 +28,7 @@ function App() {
   useEffect(() => {
     getUserIp()
   }, [])
-
-  useEffect(() => {
-    const dateTimeout = setInterval(() => {
-      setCurrentDate(new Date())
-    }, 1000)
-
-    return () => {
-      clearInterval(dateTimeout)
-    }
-  }, [])
+ 
 
   const getBP = () => {
     if (navigator.geolocation) {
@@ -85,14 +78,12 @@ function App() {
   }
 
   return (
-    <div className={(currentDate.getHours() >= 6 && currentDate.getHours() < 18) ? 'container dia' : 'container noite'}>
+    <DayOrNightWrapper>
+    <div className={`container ${(currentDate.getHours() >= 6 && currentDate.getHours() < 18) ? 'dia' : 'noite'}`}>
       <div className={(currentDate.getHours() >= 6 && currentDate.getHours() < 18) ? 'flavorDia' : 'flavorNoite'}>
         <h1 className="flavor">Hora Atual</h1>
-        <h1 className='hora'> {new Intl.DateTimeFormat('pt-BR', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }).format(currentDate)}</h1>
+        {showClock && <Clock className="hora" />}
+        <button type="button" onClick={() => setShowClock(prevShow => !prevShow)}>Toggle Clock</button>
         <h3 className="flavor">Está de  {(currentDate.getHours() >= 6 && currentDate.getHours() < 18) ? 'dia' : 'noite'} se voce abrir <br />sua janela seu Gremlin</h3>
       </div>
       <div className='comflex'>
@@ -135,14 +126,8 @@ function App() {
       )}
 
     </div>
-
-
+    </DayOrNightWrapper>
   );
-
-
-
-
-
 }
 
 export default App;
